@@ -21,43 +21,40 @@ The project will be broken down into five distinct phases.
 This phase focuses on creating the foundational structures for the project.
 
 *   **Task 1.1: Choose Language & Set Up Project:**
-    *   **Language:** Go (Golang) is recommended for its strong standard library, efficiency, and suitability for building parsers and command-line tools.
-    *   **Action:** Initialize a new Go project (`go mod init`).
+    *   **Language:** Elixir is recommended for its functional nature, pattern matching capabilities, and robust tooling with Mix.
+    *   **Action:** Initialize a new supervised Elixir project (`mix new eliza --sup`).
 
 *   **Task 1.2: Define Canonical Data Structures:**
     *   **Goal:** Create language-native structs that represent the ELIZA script data in a clean, language-independent way.
-    *   **Action:** Define the following Go structs:
-        ```go
-        // Represents a single decomposition rule and its reassembly templates.
-        type Rule struct {
-            Pattern      []string // e.g., ["*", "i", "remember", "*"]
-            Reassembly   []string // List of possible responses
-            IsMemoryRule bool     // True if pattern starts with '$'
-        }
+    *   **Action:** Define the following Elixir structs:
+        ```elixir
+        defmodule Eliza.Script.Rule do
+          defstruct pattern: [],
+                    reassembly: [],
+                    is_memory_rule: false
+        end
 
-        // Represents a keyword and its associated rules.
-        type Keyword struct {
-            Name       string
-            Rank       int
-            Rules      []Rule
-        }
+        defmodule Eliza.Script.Keyword do
+          defstruct name: "",
+                    rank: 0,
+                    rules: []
+        end
 
-        // Represents the entire ELIZA script.
-        type Script struct {
-            Initials       []string
-            Finals         []string
-            Quits          []string
-            Pres           map[string]string // Pre-transformation map
-            Posts          map[string]string // Post-transformation map
-            Synons         map[string][]string
-            Keywords       map[string]Keyword
-            PostTransforms [][2]string // Final regex-based cleanup
-        }
+        defmodule Eliza.Script do
+          defstruct initials: [],
+                    finals: [],
+                    quits: [],
+                    pres: %{},
+                    posts: %{},
+                    synons: %{},
+                    keywords: %{},
+                    post_transforms: []
+        end
         ```
 
 *   **Task 1.3: Implement a Script Parser:**
-    *   **Goal:** Create a parser that can read the `elizadata.js` file (or a JSON-formatted version of it) and load its contents into the Go structs defined above.
-    *   **Action:** Write a Go package to handle the parsing and validation of the script file.
+    *   **Goal:** Create a parser that can read the `elizadata.js` file (or a JSON-formatted version of it) and load its contents into the Elixir structs defined above.
+    *   **Action:** Write an Elixir module to handle the parsing and validation of the script file.
 
 ### Phase 2: The Decomposition Engine
 
@@ -65,7 +62,7 @@ This is the most complex phase, focusing on the core pattern-matching logic.
 
 *   **Task 2.1: Implement the Wildcard Matching Algorithm:**
     *   **Goal:** Implement the recursive, backtracking algorithm detailed in `docs/handling_problems/wildcard/implementation_guide.md`.
-    *   **Action:** Create a function that takes a sentence (as `[]string`) and a rule pattern (as `[]string`) and returns a list of captured components (`[]string`) or `nil` if the match fails. This function must correctly handle the `'0'` (indefinite) wildcard.
+    *   **Action:** Create a function that takes a sentence (as a list of strings) and a rule pattern (as a list of strings) and returns a list of captured components or an error tuple if the match fails. This function must correctly handle the `'0'` (indefinite) wildcard. Elixir's pattern matching and recursion are ideal for this.
 
 *   **Task 2.2: Implement Componentization Logic:**
     *   **Goal:** Ensure that the matching algorithm correctly captures all parts of the sentence as components, including keywords, as specified in the implementation guide.
@@ -99,19 +96,37 @@ This phase ties all the components together into a functioning engine.
 *   **Task 4.2: Implement `goto`, Memory, and Response Selection:**
     *   **Goal:** Add the remaining core ELIZA features.
     *   **Action:**
-        *   **Response Selection:** Implement a cyclic (non-random) selection policy for Version 1.0 to ensure deterministic testing.
-        *   **Memory (`$`):** Implement the memory queue (e.g., a simple slice) for storing and retrieving memories when no other rule matches.
+        *   **Response Selection:** Implement a cyclic (non-random) selection policy for Version 1.0 to ensure deterministic testing. This can be managed in the application's state.
+        *   **Memory (`# ELIZA - Implementation Plan (Version 1.0)
+
+This document outlines the implementation plan for creating a foundational, "historically-inspired" ELIZA engine. The primary goal of Version 1.0 is to build a robust core that correctly implements the essential ELIZA logic and can be tested against a known script.
+
+---
+
+## 1. Goal for Version 1.0
+
+**To create a functional ELIZA engine that correctly implements the core decomposition/reassembly logic and can accurately reproduce the classic DOCTOR script conversation.**
+
+This version will prioritize a clean, well-structured implementation based on our understanding from the Weizenbaum paper and the `implementation_guide.md`, rather than a 100% historically perfect replica of the original Lisp code.
+
+---
+
+## 2. Key Milestones & Phases
+
+The project will be broken down into five distinct phases.
+
+):** Implement the memory queue (e.g., a `GenServer` or `Agent`) for storing and retrieving memories when no other rule matches.
         *   **`goto`:** Implement the logic to redirect rule processing to a different keyword.
 
 ### Phase 5: Interface and Testing
 
 *   **Task 5.1: Create a Command-Line Interface (CLI):**
     *   **Goal:** Create a simple way to interact with the engine.
-    *   **Action:** Build a `main.go` file that creates a `Read-Eval-Print Loop` (REPL), allowing a user to "chat" with ELIZA from the terminal.
+    *   **Action:** Build a main module that creates a `Read-Eval-Print Loop` (REPL), allowing a user to "chat" with ELIZA from the terminal. This can be run with `mix run`.
 
 *   **Task 5.2: Create a "Golden Transcript" Test:**
     *   **Goal:** Verify the implementation's correctness against a known standard.
-    *   **Action:** Write an automated test that feeds the input from Weizenbaum's original conversation (found in `eliza_test.html`) into the engine and asserts that the output exactly matches the original.
+    *   **Action:** Write an ExUnit test case that feeds the input from Weizenbaum's original conversation (found in `eliza_test.html`) into the engine and asserts that the output exactly matches the original.
 
 ---
 
@@ -119,7 +134,7 @@ This phase ties all the components together into a functioning engine.
 
 Version 1.0 will be considered complete when:
 
-*   The engine can successfully parse and load the `elizadata.js` script into the canonical Go data structures.
+*   The engine can successfully parse and load the `elizadata.js` script into the canonical Elixir data structures.
 *   The engine's core logic (Decomposition, Transformation, Reassembly) is fully implemented as per the `implementation_guide.md`.
 *   The engine successfully and repeatedly passes the "Golden Transcript" test, proving it can accurately reproduce the classic DOCTOR conversation.
 *   A user can have a basic, interactive conversation with the DOCTOR personality via the CLI.
@@ -132,5 +147,5 @@ This foundational implementation will enable the following future enhancements:
 
 *   **Historical Accuracy:** Conduct deeper research into the original Lisp source code to refine the engine's semantics to be a 100% faithful replica.
 *   **Engine Abstraction:** Formally separate the engine from the script, allowing different "personality" files to be loaded at runtime.
-*   **Concurrency:** Refactor the engine to handle multiple users simultaneously.
+*   **Concurrency:** Leverage Elixir's OTP to handle multiple users simultaneously, with each conversation running in its own process.
 *   **Extended DSL:** Add more advanced features to the script DSL, such as conditional logic or state variables.
