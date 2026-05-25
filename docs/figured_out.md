@@ -1,34 +1,43 @@
-# Core Components of the ELIZA Implementation
+# What We Know: Core Components and Execution Semantics
 
-The provided JavaScript implementation is split into two main parts:
+This document details what has been figured out from the provided `elizabot.js` script and its associated documentation.
 
-1.  **The Engine (`elizabot.js`):** This is the "brain" of the chatbot. It is a general-purpose engine that takes user input, processes it according to a set of rules, and generates a response. It is not hardcoded to a specific personality. Its logic includes:
-    *   Input normalization (lowercase, punctuation handling).
-    *   Keyword searching and ranking.
-    *   Pattern matching using regular expressions.
-    *   Transforming and reassembling responses.
-    *   Managing conversational memory.
-    *   Handling pronoun reflection.
+## Core Components
 
-2.  **The Dataset (`elizadata.js`):** This file contains the "personality" of the chatbot, specifically the **DOCTOR** script that simulates a Rogerian psychotherapist. It defines the entire knowledge base for the conversation, including:
-    *   **Keywords and Ranks:** A list of keywords to look for in the user's input, each with a priority (rank). For example, `computer` has a high rank (50), making it a dominant topic.
-    *   **Decomposition Rules:** Patterns associated with each keyword that are used to break down the user's sentence. For example, `"* i remember *"` is a pattern for the keyword `remember`.
-    *   **Reassembly Templates:** A set of responses for each decomposition rule. The engine uses these templates to construct ELIZA's reply, often inserting parts of the user's sentence (capture groups) into the template.
-    *   **Synonyms:** A list of words that are treated as equivalent (e.g., `belief` can be `feel`, `think`, `believe`, or `wish`).
-    *   **Pre/Post Transformations:** Rules for normalizing input (e.g., `don't` -> `dont`) and for reflecting pronouns in the response (e.g., `my` -> `your`).
+The JavaScript implementation is split into two main parts:
 
-# Execution Flow: How the Engine Works
+1.  **The Engine (`elizabot.js`):** This is the "brain" of the chatbot. It is a general-purpose engine that takes user input, processes it according to a set of rules, and generates a response.
+2.  **The Dataset (`elizadata.js`):** This file contains the "personality" of the chatbot, specifically the **DOCTOR** script. It defines the keywords, ranks, decomposition rules, reassembly templates, synonyms, and transformations.
 
-The `elizabot.js` engine follows a clear, multi-step process to generate a response, which is the core of the ELIZA architecture:
+## Detailed Execution Semantics (According to `elizabot.js`)
 
-1.  **Input:** The user provides a sentence.
-2.  **Normalization:** The engine cleans the input by converting it to lowercase, handling punctuation, and applying pre-transformations (e.g., `i'm` becomes `i am`).
-3.  **Keyword Detection:** The engine scans the input for keywords defined in `elizaKeywords`, starting with the highest-ranked keyword.
-4.  **Decomposition (Pattern Matching):** Once the highest-ranking keyword is found, the engine tries to match the user's sentence against the decomposition patterns associated with that keyword.
-5.  **Reassembly (Response Generation):** If a pattern matches, the engine selects one of the corresponding reassembly templates.
-6.  **Capture Group Injection:** The engine takes the parts of the user's sentence that matched wildcards (`*`) in the decomposition pattern and inserts them into the reassembly template where `(n)` placeholders are found.
-7.  **Pronoun Reflection:** The engine applies post-transformation rules to the captured parts to switch the perspective (e.g., `I` becomes `you`, `my` becomes `your`).
-8.  **Memory:** If a rule is marked with a `$` (like `"* my *"`), the generated response is not immediately returned but is stored in a short-term memory queue. If no other rules match in a later turn, a response is retrieved from this memory.
-9.  **`goto` Redirection:** Some rules can redirect the engine to another keyword's rules, allowing for conversational logic to be reused.
-10. **Fallback:** If no keywords or patterns match, the engine uses the `xnone` keyword to provide a generic, non-committal response (e.g., "Please go on.").
-11. **Output:** The final, assembled response is returned to the user.
+The `elizabot.js` engine and the `implementation_guide.md` provide clear, implementable logic for the following core semantic questions:
+
+### 1. Capture Indexing and Formal Grammar
+
+A formal grammar for the ELIZA DSL is effectively defined by the combination of the `elizabot.js` parsing logic and the `implementation_guide.md`.
+
+*   **DSL Elements:** The grammar consists of:
+    *   `*` or `0`: An indefinite wildcard.
+    *   `@synon`: A placeholder for a class of synonymous words.
+    *   `$`: A prefix for a rule that flags its output for memory.
+    *   `goto`: A command to redirect to another keyword's rules.
+    *   `(n)`: A placeholder for the n-th captured component.
+*   **Capture Indexing Logic:** The `implementation_guide.md` provides a precise algorithm for how capture groups `(n)` are numbered. It uses a recursive, token-based matching system where **every matched part of the rule (wildcards and keywords) becomes a numbered component.** This provides an unambiguous way to handle complex patterns.
+
+### 2. Response Selection Policy
+
+The logic for selecting a response when a rule has multiple options is explicitly implemented in the `elizabot.js` engine.
+
+*   **Dual-Mode System:** The engine supports two modes, controlled by a `noRandom` flag.
+    *   **Random Selection (Default):** The engine selects a reassembly template at random from the list of available options.
+    *   **Cyclic Selection:** If the `noRandom` flag is set to `true`, the engine cycles through the responses in the order they are defined, using an internal counter to track the last-used response for each rule.
+
+### 3. Memory System Rules
+
+The rules for the memory queue in the `elizabot.js` implementation are clearly defined.
+
+*   **Triggering:** A memory is saved when a decomposition rule prefixed with a `$` is matched.
+*   **Storage:** The generated response is pushed into a FIFO (First-In, First-Out) queue with a default size of 20. If the queue is full, the oldest memory is discarded.
+*   **Retrieval:** A memory is retrieved only when the engine cannot find any other matching rule for a new user input.
+*   **Retrieval Policy:** Memory retrieval is **random** by default. If the `noRandom` flag is true, it retrieves the oldest memory from the queue sequentially.

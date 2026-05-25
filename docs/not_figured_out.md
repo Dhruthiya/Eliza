@@ -1,21 +1,25 @@
-# What Is Missing: The Path to a Full Reconstruction
+# What Is Still Missing: Historical Accuracy
 
-While the provided JavaScript files are a great asset, they are a *port*, not the original. To achieve a truly authentic reconstruction, the following aspects, which define the **exact execution semantics**, need to be formally defined by studying the recommended historical sources:
+The primary unknown is no longer *how* the system works, but rather the set of subtle differences between the current JavaScript implementation (`elizabot.js`) and Joseph Weizenbaum's original 1966 Lisp/SLIP implementation.
 
-*   **Wildcard Matching:** Is the `*` wildcard "greedy"? How does it behave with multiple wildcards? Can it match an empty string?
-*   **Capture Indexing:** How are capture groups `(n)` numbered, especially with complex patterns involving synonyms?
-*   **Response Selection:** When a rule has multiple possible responses, is the selection random, cyclic, or something else? The `elizabot.js` engine has a flag to switch between random and sequential, but the original's exact behavior needs to be confirmed.
-*   **Memory System:** What were the exact rules for the memory queue (size, retrieval policy, etc.)?
-*   **Formal Grammar:** The current rules are informal. A full reconstruction would require a formal grammar for the ELIZA DSL (`*`, `@`, `()`, `goto`, `$`).
+While we have a robust, working model, achieving a truly faithful reconstruction requires clarifying the exact historical semantics to ensure our version is not just a port, but a true recreation.
 
-# Recommended Next Steps
+### Specific Historical Ambiguities
 
-The provided documentation gives a clear research order to fill in these missing pieces:
+1.  **Original Wildcard and Decomposition Logic:**
+    *   The logic described in our `implementation_guide.md` is based on a careful reading of the 1966 paper. However, a code-level comparison with the original Lisp/SLIP source code (if it can be found) is the only way to be 100% certain about the nuances of the backtracking algorithm and componentization.
 
-1.  **Start with Weizenbaum's 1966 Paper:** This is the "bible" for the ELIZA architecture and will answer most of the questions about the intended semantics.
-2.  **Find the Original DOCTOR Script:** This will provide the canonical set of rules, which may have been simplified or altered in the JavaScript port.
-3.  **Analyze the `elizabot.js` Engine:** This provides a working model of the runtime semantics.
-4.  **Study Norvig's Lisp ELIZA:** This will provide a clean, well-documented reference implementation to compare against.
-5.  **Examine other Lisp Ports:** These are more likely to preserve the original symbolic pattern matching behavior than modern regex-based ports.
+2.  **Original Response Selection Policy:**
+    *   The `elizabot.js` implementation provides both random and cyclic selection. Was the original implementation truly random, or did it use a simpler pseudo-random generator or a purely cyclic method?
 
-By following this path, the project can move from having a good *port* of ELIZA to having a truly accurate, language-independent, and historically faithful *reconstruction* of the original program.
+3.  **Original Memory System:**
+    *   Were the memory queue size (20 in `elizabot.js`) and the FIFO retrieval policy identical to the original implementation?
+
+### Recommended Next Steps (Unchanged)
+
+The path to resolving these final ambiguities remains the same. The focus is on comparing our current understanding against historical sources.
+
+1.  **Deep-Dive into Weizenbaum's 1966 Paper:** Continue to analyze the paper for any further clues about the original implementation's specific algorithms.
+2.  **Find and Analyze the Original DOCTOR Script:** This is crucial to confirm the canonical rules and data structures, which may have been altered in the JS port.
+3.  **Study Norvig's Lisp ELIZA:** Norvig's clean, modern Lisp implementation is an excellent reference for a well-documented interpretation of the original logic.
+4.  **Examine other classic Lisp Ports:** If the original source is unavailable, other early Lisp implementations are the most likely to preserve the original's symbolic, list-based processing semantics.
