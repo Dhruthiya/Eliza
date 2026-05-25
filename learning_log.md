@@ -1,0 +1,3 @@
+- we are a team of 6 members working on building the first ever chatbot to ever exist in three languages ellixr,go,crystal.
+- Initially we are trying to search for existing documentations, research papers, scripts for eliza.
+- Creating an Architecture for building Eliza from scratch  
