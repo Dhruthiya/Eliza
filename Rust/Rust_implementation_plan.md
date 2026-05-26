@@ -1,3 +1,4 @@
+
 # ELIZA - Rust Implementation Plan (Version 1.0)
 
 This document outlines the implementation plan for creating a foundational, "historically-inspired" ELIZA engine in Rust. The primary goal of Version 1.0 is to build a robust, memory-safe, and performant core that correctly implements the essential ELIZA logic and can be tested against a known script.
