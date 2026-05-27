@@ -5,74 +5,125 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ELIZA - Go</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            align-items: center;
-            background:
-                radial-gradient(circle at top, rgba(0, 255, 170, 0.08), transparent 35%),
-                linear-gradient(180deg, #08110f 0%, #030504 100%);
-            color: #9dffcf;
-            display: flex;
-            font-family: "Courier New", monospace;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 24px;
+        :root {
+            --bg-top: #08110f;
+            --bg-bottom: #020403;
+            --panel: rgba(4, 12, 9, 0.84);
+            --line: rgba(97, 255, 176, 0.22);
+            --line-strong: rgba(97, 255, 176, 0.38);
+            --text: #d9fff0;
+            --muted: #8fe8bc;
+            --accent: #66ffc2;
         }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top, rgba(0, 255, 170, 0.10), transparent 28%),
+                linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+            color: var(--text);
+            font-family: "Courier New", monospace;
+        }
+
         .shell {
-            background: rgba(1, 8, 6, 0.94);
-            border: 1px solid rgba(97, 255, 176, 0.45);
-            border-radius: 14px;
-            box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
             display: flex;
             flex-direction: column;
-            height: min(760px, 92vh);
-            max-width: 760px;
-            overflow: hidden;
-            width: 100%;
+            height: 100vh;
+            width: 100vw;
         }
+
         .topbar {
-            background: linear-gradient(90deg, rgba(13, 36, 28, 0.95), rgba(5, 16, 12, 0.95));
-            border-bottom: 1px solid rgba(97, 255, 176, 0.25);
-            letter-spacing: 0.08em;
-            padding: 16px 20px;
+            backdrop-filter: blur(10px);
+            background: rgba(2, 10, 7, 0.7);
+            border-bottom: 1px solid var(--line);
+            color: var(--muted);
+            letter-spacing: 0.14em;
+            padding: 20px 28px 18px;
             text-transform: uppercase;
         }
+
         .chat {
             flex: 1;
+            font-size: clamp(18px, 1.7vw, 24px);
+            line-height: 1.75;
+            margin: 0 auto;
+            max-width: 1080px;
             overflow-y: auto;
-            padding: 22px;
+            padding: 28px 28px 20px;
+            width: 100%;
         }
+
         .message {
-            line-height: 1.5;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
             white-space: pre-wrap;
             word-break: break-word;
         }
-        .user { color: #d9fff0; }
-        .eliza { color: #66ffc2; }
+
+        .user { color: var(--text); }
+        .eliza { color: var(--accent); }
+
         .controls {
-            border-top: 1px solid rgba(97, 255, 176, 0.25);
+            backdrop-filter: blur(14px);
+            background: var(--panel);
+            border-top: 1px solid var(--line);
             display: flex;
-            gap: 12px;
-            padding: 16px;
+            gap: 14px;
+            padding: 18px 24px 24px;
         }
+
         input, button {
-            background: #07100d;
-            border: 1px solid rgba(97, 255, 176, 0.35);
-            border-radius: 10px;
-            color: #c9ffe6;
+            background: rgba(6, 18, 13, 0.92);
+            border: 1px solid var(--line-strong);
+            color: var(--text);
             font: inherit;
-            padding: 12px 14px;
+            padding: 16px 18px;
         }
+
         input {
             flex: 1;
+            font-size: 18px;
+            min-width: 0;
         }
+
+        input:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
         button {
             cursor: pointer;
-            min-width: 96px;
+            font-size: 16px;
+            min-width: 120px;
+            text-transform: uppercase;
         }
+
         button:hover {
-            background: #0d1b16;
+            background: rgba(12, 29, 22, 0.96);
+        }
+
+        @media (max-width: 720px) {
+            .topbar {
+                padding: 16px 18px 14px;
+            }
+
+            .chat {
+                font-size: 17px;
+                padding: 20px 18px 16px;
+            }
+
+            .controls {
+                gap: 10px;
+                padding: 14px 16px 16px;
+            }
+
+            button {
+                min-width: 92px;
+            }
         }
     </style>
 </head>
