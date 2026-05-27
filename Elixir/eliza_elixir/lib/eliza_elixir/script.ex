@@ -27,5 +27,7 @@ defmodule Eliza.Script do
             posts: %{},
             synons: %{},
             keywords: [],
+            memory_pattern: [],
+            memory_templates: [],
             post_transforms: []
 end

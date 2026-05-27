@@ -1,0 +1,183 @@
+What This Reference Is
+  reference/ is Anthony Hay’s recreation of Joseph Weizenbaum’s 1966 ELIZA/DOCTOR, primarily in C++:
+
+  - Main implementation: reference/src/eliza.cpp
+  - HASH explanation: reference/doc/Eliza_part_3.md
+  - Original source-code discoveries: reference/doc/Eliza_part_2.md
+  - Initial recreation writeup: reference/doc/Eliza_part_1.md
+  - Original CACM DOCTOR script transcription: reference/scripts/ELIZA-script-DOCTOR-original-1966-CACM-appendix.txt
+
+  I verified the C++ file compiles locally with g++ -std=c++20, and running it briefly prints:
+
+  HOW DO YOU DO. PLEASE TELL ME YOUR PROBLEM
+
+  clang++ is not installed here, so I used g++.
+
+  Major Historical Observations
+  The recreation was built in phases.
+
+  First version: implemented from Weizenbaum’s January 1966 CACM paper and reproduced the famous “Men are all alike” conversation.
+
+  After original ELIZA source was found in MIT archives, the implementation changed in several important ways:
+
+  - BUT is a delimiter, not just comma and period.
+  - The vague “certain counting mechanism” is the LIMIT variable.
+  - LIMIT cycles 1 -> 2 -> 3 -> 4 -> 1.
+  - A memory is recalled only when LIMIT == 4.
+  - ELIZA has hardcoded fallback/error messages selected by LIMIT: PLEASE CONTINUE, HMMM, GO ON , PLEASE, I SEE.
+  - The found source was earlier than the CACM description in some ways: it lacked full keystack/NEWKEY behavior, lacked CACM-style EDIT, and used a smaller keyword hash table.
+  - The final recreation keeps the CACM-described behavior where appropriate, while incorporating source-discovered details.
+
+  After the SLIP HASH function was found, the last random-looking part became deterministic:
+
+  - Memory-rule selection is not random.
+  - It is selected by HASH(BOT(INPUT), 2).
+  - BOT(INPUT) means the last SLIP cell of the processed input, effectively the last six-character chunk of the final word.
+  - This makes ELIZA conversations reproducible for the same script/input.
+
+  HASH Implementation
+  The discovered HASH(D,N) is a mid-square hash.
+
+  In C++:
+
+  int hash(uint_least64_t d, int n)
+  {
+      d &= 0x7FFFFFFFFULL;
+      d *= d;
+      d >>= 35 - n / 2;
+      return d & (1ULL << n) - 1;
+  }
+
+  Important details:
+
+  - IBM 7094 words are 36-bit sign-magnitude.
+  - Only the low 35 bits are squared.
+  - Characters are Hollerith/BCD encoded, six bits each.
+  - A SLIP cell stores up to six characters.
+  - Words longer than six characters span cells.
+  - For memory selection, the recreation hashes the last chunk of the last word, padded to six characters.
+  - Example: "HERE" becomes Hollerith octal 0302551256060; HASH(..., 2) == 3, selecting the fourth MEMORY rule.
+
+  This explains the CACM memory response:
+
+  DOES THAT HAVE ANYTHING TO DO WITH THE FACT THAT YOUR BOYFRIEND MADE YOU COME HERE
+
+  Core Engine Flow
+  The final C++ engine is elizalogic::eliza::response.
+
+  Processing steps:
+
+  1. Convert user input to ELIZA-compatible uppercase.
+  2. Normalize modern punctuation where practical.
+  3. Split into words and delimiter tokens.
+  4. Increment LIMIT.
+  5. Scan input left to right.
+  6. Apply word substitutions immediately, e.g. I -> YOU, MY -> YOUR.
+  7. Detect keywords and build a keystack by precedence.
+  8. Treat ., ,, and BUT as delimiters.
+  9. Keep only the first subclause containing a keyword.
+  10. If no keyword exists and LIMIT == 4, recall the oldest memory if present.
+  11. Otherwise process keywords from the keystack.
+  12. Before normal transformation, attempt to create a memory if the current top keyword is the MEMORY keyword.
+  13. Match decomposition patterns.
+  14. Select the next cyclic reassembly rule.
+  15. Handle special reassembly cases: NEWKEY, =KEYWORD, and PRE (...) (=KEYWORD).
+  16. If a rule succeeds, return the reassembled response.
+  17. If matching fails in an error-like path, optionally return NOMACH[LIMIT].
+  18. Final fallback is the NONE rule.
+
+  Pattern Matching
+  The matcher supports the original ELIZA pattern language:
+
+  - Literal words.
+  - 0: zero or more words.
+  - Positive integers: exactly N words.
+  - (* A B C): match any listed word.
+  - (/TAG1 TAG2): match any keyword assigned to those DLIST tags.
+
+  Unlike the Elixir/Go/Rust ports you had, this recreation captures every decomposition component position, including literals and grouped matches. That is why reassembly indexes in
+  the original script correspond directly to pattern positions.
+
+  Example:
+
+  (0 YOU ARE 0 (*SAD UNHAPPY DEPRESSED SICK) 0)
+
+  can match transformed input such as:
+
+  HE SAYS YOU ARE DEPRESSED MUCH OF THE TIME
+
+  and then use component 5 to produce:
+
+  I AM SORRY TO HEAR YOU ARE DEPRESSED
+
+  Script System
+  The script parser reads the original S-expression-like script format.
+
+  Script elements include:
+
+  - Opening remarks.
+  - Keyword rules.
+  - Optional word substitution: (I = YOU ...)
+  - Optional precedence.
+  - DLIST tag definitions.
+  - Decomposition/reassembly transformations.
+  - MEMORY rule with exactly four transformations.
+  - Required NONE rule.
+
+  The built-in script is the January 1966 CACM DOCTOR script embedded directly in reference/src/eliza.cpp. It is also available as a separate script file.
+
+  The reference notes say the CACM DOCTOR script has 66 keywords; the parsed internal rule map test counts 67 because NONE is represented internally as a special key zNONE.
+
+  Memory
+  Memory is historically accurate in the final recreation:
+
+  - There is exactly one MEMORY keyword.
+  - In the DOCTOR script, that keyword is MY.
+  - MY must also exist as a normal keyword.
+  - There must be exactly four memory transformations.
+  - The selected memory transformation is determined by hash(last_chunk_as_bcd(words.back()), 2).
+  - Created memories are queued FIFO.
+  - Recall happens only when no keyword is available and LIMIT == 4.
+
+  The memory rule from the CACM script:
+
+  (MEMORY MY
+      (0 YOUR 0 = LETS DISCUSS FURTHER WHY YOUR 3)
+      (0 YOUR 0 = EARLIER YOU SAID YOUR 3)
+      (0 YOUR 0 = BUT YOUR 3)
+      (0 YOUR 0 = DOES THAT HAVE ANYTHING TO DO WITH THE FACT THAT YOUR 3))
+
+  Interfaces
+  The C++ program supports:
+
+  - Built-in DOCTOR script when no script filename is passed.
+  - External script file argument.
+  - --showscript to print the built-in DOCTOR script.
+  - --nobanner, --quick, --slow.
+  - Optional serial I/O if compiled with SUPPORT_SERIAL_IO.
+  - Conversation commands:
+      - * show trace
+      - ** show transformation rules used
+      - *cacm replay CACM conversation
+      - *key
+      - *key KEYWORD
+      - *traceon
+      - *traceauto
+      - *traceoff
+      - *tracepre
+
+  Other Files
+  reference/src/ymatch.cpp is not part of the main implementation. Its header says it is incomplete and buggy, intended only to understand SLIP/YMATCH.
+
+  reference/src/eliza.html is the JavaScript recreation mentioned in the README, but the canonical final implementation details are clearest in eliza.cpp.
+
+  Bottom Line
+  The final reference recreation is a historically informed C++ ELIZA that:
+
+  - Uses the original CACM DOCTOR script format.
+  - Embeds a corrected/transcribed 1966 DOCTOR script.
+  - Implements keyword precedence, keystack behavior, substitutions, DLIST tags, decomposition/reassembly, NEWKEY, PRE, NONE, and MEMORY.
+  - Incorporates source-code discoveries: BUT delimiter, LIMIT, and hardcoded NOMACH messages.
+  - Incorporates the discovered SLIP HASH(D,N) function, making MEMORY selection deterministic instead of random.
+  - Reproduces the published CACM conversation and has extensive embedded tests for script parsing, matching, HASH, and historical conversations.
+

@@ -37,9 +37,9 @@ defmodule Eliza.Decomposer do
     greedy_wildcard(sentence, pattern_rest, acc)
   end
 
-  # Exact match (don't capture keywords)
+  # Exact match (and capture the literal word)
   defp do_match_helper([word | sent_rest], [word | pattern_rest], acc) do
-    do_match_helper(sent_rest, pattern_rest, acc)
+    do_match_helper(sent_rest, pattern_rest, [word | acc])
   end
 
   # Mismatch
