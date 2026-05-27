@@ -8,7 +8,7 @@ defmodule Eliza.ScriptLoader do
   alias Eliza.Script.Rule
 
   def load_script(base_path \\ nil) do
-    data_path = base_path || Path.join([__DIR__, "../../data"])
+    data_path = base_path || default_data_path()
     
     %Script{
       initials: load_json(data_path, "elizaInitials.json"),
@@ -20,6 +20,10 @@ defmodule Eliza.ScriptLoader do
       keywords: load_keywords(data_path, "elizaKeywords.json"),
       post_transforms: load_json(data_path, "elizaPostTransforms.json")
     }
+  end
+
+  defp default_data_path do
+    Path.expand(Path.join([__DIR__, "../../../../data"]))
   end
 
   defp load_json(base_path, filename) do

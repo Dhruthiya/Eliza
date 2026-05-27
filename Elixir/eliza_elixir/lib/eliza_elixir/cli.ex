@@ -8,7 +8,7 @@ defmodule Eliza.CLI do
   def start do
     IO.puts("\n=== ELIZA - The Original Chatbot ===\n")
     
-    script = ScriptLoader.load_script("/home/cse/eliza/data")
+    script = ScriptLoader.load_script()
     State.reset()
     
     initial = Enum.random(script.initials)

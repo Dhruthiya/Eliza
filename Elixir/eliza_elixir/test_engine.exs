@@ -15,7 +15,7 @@ Code.require_file("lib/eliza_elixir/engine.ex", __DIR__)
 
 # Load script
 IO.puts("Loading ELIZA script...")
-script = Eliza.ScriptLoader.load_script("/home/cse/eliza/data")
+script = Eliza.ScriptLoader.load_script()
 
 IO.puts("Script loaded successfully!")
 IO.puts("Keywords: #{length(script.keywords)}")

@@ -8,7 +8,7 @@ defmodule Eliza.GoldenTranscriptTest do
       {:error, {:already_started, _pid}} -> :ok
     end
     State.reset()
-    script = ScriptLoader.load_script("/home/cse/eliza/data")
+    script = ScriptLoader.load_script()
     {:ok, script: script}
   end
 

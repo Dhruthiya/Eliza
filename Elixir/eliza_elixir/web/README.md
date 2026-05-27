@@ -4,7 +4,7 @@
 
 1. **Start the server:**
    ```bash
-   cd /home/cse/eliza/eliza_elixir/web
+   cd /home/admin-aiml/WingsAI/eliza/Elixir/eliza_elixir/web
    ./server.exs
    ```
 

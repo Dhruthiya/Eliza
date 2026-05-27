@@ -10,7 +10,7 @@ Code.require_file("lib/eliza_elixir/state.ex", __DIR__)
 Code.require_file("lib/eliza_elixir/engine.ex", __DIR__)
 
 {:ok, _pid} = Eliza.State.start_link([])
-script = Eliza.ScriptLoader.load_script("/home/cse/eliza/data")
+script = Eliza.ScriptLoader.load_script()
 
 IO.puts("\n╔════════════════════════════════════════╗")
 IO.puts("║   ELIZA - Interactive Test Session    ║")

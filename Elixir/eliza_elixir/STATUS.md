@@ -6,7 +6,7 @@
 - [x] Elixir project initialized with supervision tree
 - [x] Data structures defined (Script, Keyword, Rule)
 - [x] Script loader implemented to read JSON files
-- [x] Successfully loads all data files from `/home/cse/eliza/data/`
+- [x] Successfully loads all data files from `/home/admin-aiml/WingsAI/eliza/data/`
 
 ### ✅ Phase 2: Decomposition Engine  
 - [x] Greedy wildcard matching algorithm implemented
@@ -59,12 +59,14 @@ The script loader loads synonyms but doesn't expand `@synon` patterns. This mean
 
 ## Test Results
 
+Current verification on May 27, 2026:
+
 ```
+mix deps.get
 mix test
-.......
-Finished in 0.02 seconds
-1 doctest, 6 tests, 0 failures ✅ (decomposer tests)
 ```
+
+Result: the project compiles and the decomposer-focused tests pass, but the full suite has 1 known failure in `Eliza.GoldenTranscriptTest`. The failing case expects a depression/sadness response, while the current engine returns the `xnone` fallback. This is consistent with the missing synonym expansion limitation above.
 
 Golden transcript test: Partial pass (synonym expansion needed for 100% accuracy)
 

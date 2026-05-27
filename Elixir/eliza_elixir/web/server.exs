@@ -14,7 +14,8 @@ Code.require_file("../lib/eliza_elixir/state.ex", __DIR__)
 Code.require_file("../lib/eliza_elixir/engine.ex", __DIR__)
 
 {:ok, _pid} = Eliza.State.start_link([])
-script = Eliza.ScriptLoader.load_script("/home/cse/eliza/data")
+script = Eliza.ScriptLoader.load_script()
+port = System.get_env("PORT", "4000") |> String.to_integer()
 
 defmodule ElizaWeb do
   import Plug.Conn
@@ -27,7 +28,7 @@ defmodule ElizaWeb do
   end
 
   defp route(conn, "GET", [], _script) do
-    html = File.read!("index.html")
+    html = File.read!(Path.join(__DIR__, "index.html"))
     conn
     |> put_resp_content_type("text/html")
     |> send_resp(200, html)
@@ -53,8 +54,8 @@ end
 IO.puts("\n╔════════════════════════════════════════╗")
 IO.puts("║     ELIZA Web Server Started!         ║")
 IO.puts("╚════════════════════════════════════════╝")
-IO.puts("\n➜ Open: http://localhost:4000")
+IO.puts("\n➜ Open: http://localhost:#{port}")
 IO.puts("➜ Press Ctrl+C to stop\n")
 
-{:ok, _} = Bandit.start_link(plug: {ElizaWeb, script}, port: 4000)
+{:ok, _} = Bandit.start_link(plug: {ElizaWeb, script}, port: port)
 Process.sleep(:infinity)
