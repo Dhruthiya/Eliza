@@ -1,8 +1,9 @@
 use crate::script::{Keyword, Rule, Script};
 use serde_json::Value;
 use std::collections::HashMap;
+use std::env;
 use std::fs;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 #[derive(Debug)]
 pub enum ParseError {
@@ -38,6 +39,36 @@ impl From<serde_json::Error> for ParseError {
 pub struct ScriptLoader;
 
 impl ScriptLoader {
+    pub fn resolve_data_directory(explicit: Option<&Path>) -> Result<PathBuf, ParseError> {
+        if let Some(path) = explicit {
+            return Self::validate_data_directory(path);
+        }
+
+        if let Ok(env_path) = env::var("ELIZA_DATA_PATH") {
+            if !env_path.is_empty() {
+                return Self::validate_data_directory(Path::new(&env_path));
+            }
+        }
+
+        let cwd = env::current_dir()?;
+        let candidates = [
+            cwd.join("data"),
+            cwd.join("../data"),
+            cwd.join("../../data"),
+            cwd.join("Rust/../data"),
+        ];
+
+        for candidate in candidates {
+            if Self::is_data_directory(&candidate) {
+                return Ok(candidate);
+            }
+        }
+
+        Err(ParseError::InvalidFormat(
+            "could not locate ELIZA data directory; set ELIZA_DATA_PATH or run from the repository".to_string(),
+        ))
+    }
+
     pub fn load_from_directory(dir: &Path) -> Result<Script, ParseError> {
         let initials: Vec<String> = Self::load_json_file(dir.join("elizaInitials.json"))?;
         let finals: Vec<String> = Self::load_json_file(dir.join("elizaFinals.json"))?;
@@ -129,5 +160,22 @@ impl ScriptLoader {
         }
         
         Ok(keywords)
+    }
+
+    fn validate_data_directory(path: &Path) -> Result<PathBuf, ParseError> {
+        if Self::is_data_directory(path) {
+            Ok(path.to_path_buf())
+        } else {
+            Err(ParseError::InvalidFormat(format!(
+                "data directory does not contain ELIZA JSON files: {}",
+                path.display()
+            )))
+        }
+    }
+
+    fn is_data_directory(path: &Path) -> bool {
+        path.join("elizaKeywords.json").is_file()
+            && path.join("elizaInitials.json").is_file()
+            && path.join("elizaFinals.json").is_file()
     }
 }

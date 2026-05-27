@@ -1,0 +1,11 @@
+/home/admin-aiml/WingsAI/eliza/Rust/target/debug/deps/libppv_lite86-a456a0eb100c86d0.rmeta: /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/lib.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/soft.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/types.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/x86_64/mod.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/x86_64/sse2.rs
+
+/home/admin-aiml/WingsAI/eliza/Rust/target/debug/deps/libppv_lite86-a456a0eb100c86d0.rlib: /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/lib.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/soft.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/types.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/x86_64/mod.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/x86_64/sse2.rs
+
+/home/admin-aiml/WingsAI/eliza/Rust/target/debug/deps/ppv_lite86-a456a0eb100c86d0.d: /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/lib.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/soft.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/types.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/x86_64/mod.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/x86_64/sse2.rs
+
+/home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/lib.rs:
+/home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/soft.rs:
+/home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/types.rs:
+/home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/x86_64/mod.rs:
+/home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ppv-lite86-0.2.21/src/x86_64/sse2.rs:

@@ -1,0 +1,11 @@
+/home/admin-aiml/WingsAI/eliza/Rust/target/debug/deps/libsocket2-434caa3e23141ccf.rmeta: /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/lib.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/sockaddr.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/socket.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/sockref.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/sys/unix.rs
+
+/home/admin-aiml/WingsAI/eliza/Rust/target/debug/deps/libsocket2-434caa3e23141ccf.rlib: /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/lib.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/sockaddr.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/socket.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/sockref.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/sys/unix.rs
+
+/home/admin-aiml/WingsAI/eliza/Rust/target/debug/deps/socket2-434caa3e23141ccf.d: /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/lib.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/sockaddr.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/socket.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/sockref.rs /home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/sys/unix.rs
+
+/home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/lib.rs:
+/home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/sockaddr.rs:
+/home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/socket.rs:
+/home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/sockref.rs:
+/home/admin-aiml/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.6.3/src/sys/unix.rs:

@@ -7,9 +7,8 @@ mod state;
 mod transformer;
 mod web_server;
 
-use parser::ScriptLoader;
-use std::path::Path;
 use std::env;
+use parser::ScriptLoader;
 
 #[tokio::main]
 async fn main() {
@@ -18,8 +17,14 @@ async fn main() {
     if args.contains(&"--web".to_string()) {
         web_server::start_server().await;
     } else {
-        let script_path = Path::new("/home/cse/eliza/data");
-        match ScriptLoader::load_from_directory(script_path) {
+        let script_path = match ScriptLoader::resolve_data_directory(None) {
+            Ok(path) => path,
+            Err(e) => {
+                eprintln!("Failed to locate ELIZA data directory: {}", e);
+                std::process::exit(1);
+            }
+        };
+        match ScriptLoader::load_from_directory(&script_path) {
             Ok(script) => {
                 let engine = engine::ElizaEngine::new(script, false);
                 cli::run_repl(engine);

@@ -1,7 +1,6 @@
 #!/bin/bash
 
-export PATH="/home/cse/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin:$PATH"
-cd "/home/cse/eliza/Rust"
+cd "$(dirname "$0")"
 
 echo ""
 echo "╔════════════════════════════════════════╗"
