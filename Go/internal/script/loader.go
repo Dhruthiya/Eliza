@@ -65,7 +65,8 @@ func ResolveProjectRoot() (string, error) {
 	candidates := []string{
 		".",
 		"..",
-		"/home/cse/eliza/Go",
+		"../Go",
+		"../../Go",
 	}
 	for _, candidate := range candidates {
 		abs, err := filepath.Abs(candidate)
@@ -92,9 +93,9 @@ func resolveDataPath(basePath string) (string, error) {
 	}
 
 	candidates := []string{
+		"../../data",
 		"../data",
 		"./data",
-		"/home/cse/eliza/data",
 	}
 	for _, candidate := range candidates {
 		if dirExists(candidate) {

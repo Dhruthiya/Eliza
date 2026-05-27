@@ -1,6 +1,6 @@
 # ELIZA Go Implementation Plan
 
-This plan is based on the current implementation in `/home/cse/eliza/Elixir/eliza_elixir` and the original JavaScript reference in `/home/cse/eliza/Elixir/eliza_script`.
+This plan is based on the current implementation in `/home/admin-aiml/WingsAI/eliza/Elixir/eliza_elixir` and the original JavaScript reference in `/home/admin-aiml/WingsAI/eliza/Elixir/eliza_script`.
 
 The goal is to build a Go version that matches the current Elixir behavior first, including the web interface, and then optionally close the known gaps between the Elixir port and the original JavaScript ELIZA.
 
@@ -9,7 +9,7 @@ The goal is to build a Go version that matches the current Elixir behavior first
 The Elixir codebase is small and organized around a straightforward pipeline:
 
 1. `script_loader.ex`
-   Loads JSON files from `/home/cse/eliza/data` into native structs.
+   Loads JSON files from `/home/admin-aiml/WingsAI/eliza/data` into native structs.
 
 2. `script.ex`
    Defines the core data structures:
@@ -87,7 +87,7 @@ Recommendation:
 
 ## 4. Proposed Go Project Structure
 
-Create a dedicated Go module under `/home/cse/eliza/Go`.
+Create a dedicated Go module under `/home/admin-aiml/WingsAI/eliza/Go`.
 
 Suggested layout:
 
@@ -171,7 +171,7 @@ This gives room for clean synonym expansion in `v1.1`.
 
 Implement a loader that:
 
-- reads the JSON files in `/home/cse/eliza/data`
+- reads the JSON files in `/home/admin-aiml/WingsAI/eliza/data`
 - converts pair arrays into maps for `pres` and `posts`
 - parses keyword rules into internal `Rule` structs
 - sorts keywords descending by rank
@@ -314,7 +314,7 @@ The Go CLI should match the Elixir CLI UX closely.
 
 Requirements:
 
-- load script from `/home/cse/eliza/data`
+- load script from `/home/admin-aiml/WingsAI/eliza/data`
 - print a random initial greeting
 - read from stdin in a loop
 - print ELIZA responses
@@ -479,7 +479,7 @@ curl -X POST http://localhost:4000/chat \
 
 Definition of done:
 
-- script loads successfully from `/home/cse/eliza/data`
+- script loads successfully from `/home/admin-aiml/WingsAI/eliza/data`
 - keywords parse and sort correctly
 
 ### Phase 2: Core Matching And Transformation
@@ -559,7 +559,7 @@ This order keeps the core logic isolated and testable before adding interfaces.
 When implementation starts, these are the first commands to run:
 
 ```bash
-cd /home/cse/eliza/Go
+cd /home/admin-aiml/WingsAI/eliza/Go
 go mod init eliza-go
 mkdir -p cmd/eliza internal/script internal/engine internal/web web tests
 ```
