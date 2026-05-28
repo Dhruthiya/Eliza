@@ -24,12 +24,16 @@ defmodule Eliza.Engine do
   defp normalize_input(input, pres) do
     input
     |> String.downcase()
-    |> String.replace(~r/[^\w\s]/, " ")
     |> apply_transformations(pres)
+    |> String.replace(~r/[^\w\s]/, " ")
+    |> String.split()
+    |> Enum.join(" ")
   end
 
   defp apply_transformations(text, transformations) do
-    Enum.reduce(transformations, text, fn {pattern, replacement}, acc ->
+    transformations
+    |> Enum.sort_by(fn {pattern, _replacement} -> String.length(pattern) end, :desc)
+    |> Enum.reduce(text, fn {pattern, replacement}, acc ->
       String.replace(acc, pattern, replacement)
     end)
   end
@@ -37,7 +41,7 @@ defmodule Eliza.Engine do
   defp find_response(words, script) do
     # Try to match keywords in rank order
     Enum.find_value(script.keywords, fn keyword ->
-      if keyword.name in words or keyword.name == "xnone" do
+      if keyword.name != "xnone" and keyword.name in words do
         try_keyword_rules(words, keyword, script)
       end
     end) || get_fallback(script)
@@ -46,7 +50,7 @@ defmodule Eliza.Engine do
   defp try_keyword_rules(words, keyword, script) do
     Enum.with_index(keyword.rules)
     |> Enum.find_value(fn {rule, rule_index} ->
-      case Decomposer.match(words, rule.pattern) do
+      case Decomposer.match(words, rule.pattern, script.synons) do
         {:ok, components} ->
           process_match(components, rule, keyword, rule_index, script, words)
 
@@ -71,16 +75,36 @@ defmodule Eliza.Engine do
         goto_keyword = String.trim_leading(template, "goto ")
         handle_goto(words, goto_keyword, script)
       else
-        Transformer.reassemble(template, transformed)
+        if valid_template_components?(template, transformed) do
+          Transformer.reassemble(template, transformed)
+        else
+          nil
+        end
       end
 
     # Handle memory
-    if rule.is_memory_rule do
-      State.save_memory(response)
+    if is_nil(response) do
       nil
     else
-      response
+      if rule.is_memory_rule do
+      State.save_memory(response)
+      nil
+      else
+        response
+      end
     end
+  end
+
+  defp valid_template_components?(template, components) do
+    Regex.scan(~r/\((\d+)\)/, template, capture: :all_but_first)
+    |> Enum.all?(fn [num] ->
+      idx = String.to_integer(num) - 1
+
+      case Enum.at(components, idx) do
+        nil -> false
+        value -> String.trim(value) != ""
+      end
+    end)
   end
 
   defp handle_goto(words, keyword_name, script) do

@@ -22,8 +22,8 @@ defmodule Eliza.GoldenTranscriptTest do
       {"I need some help, that much seems certain.", "What would it mean to you if you got some help"},
       {"Perhaps I could learn to get along with my mother.", "Tell me more about your family"},
       {"My mother takes care of me.", "Who else in your family takes care of you ?"},
-      {"My father.", "Your father"},
-      {"You are like my father in some ways.", "What resemblance do you see"}
+      {"My father.", "Why do you say your father ?"},
+      {"You are like my father in some ways.", "What else comes to your mind when you think of your in some ways ?"}
     ]
 
     Enum.each(conversation, fn {input, expected_start} ->
