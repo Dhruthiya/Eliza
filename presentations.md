@@ -1,0 +1,19 @@
+- powerpoint presentation = powerless pointless presentation
+- about me - my views/biases
+- Doesn't matter what tool to use
+- Some Tools and languages are opiniated.
+- point of the presentation is not about the slide it is about communicating.
+- Your slide should not contain more than 3 font sizes - 40,36,32
+- presentation font to be san serif
+- Never use all capitals - it is rude.
+- use images
+- image issues - size and quality 
+- when presentors say "I'm not sure if your able to see the image" then what the hell did u do instead of fixing it.
+- Appropriateness is important
+- role of thumb - 5 minutes 5 lines 5 
+- dont talk too much just for one slide
+- a good slide should stink and cryptic(to make ppl excited about what they are gonna talk about)
+- LOOK AT THE STEVE JOBS KEY NOTE(ROASTING MICROSOFT) ALSO LOOK AT BILL GATES PRESENTATIONS
+-  use slide to illuminate ur point but not for support 
+-  any oppurtunity jump up and talk
+-  
