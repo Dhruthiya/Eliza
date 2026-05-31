@@ -12,7 +12,7 @@ This document outlines the implementation plan for creating a foundational, "his
 This version will prioritize:
 - Clean, idiomatic Rust code with strong type safety
 - Zero-cost abstractions and memory safety without garbage collection
-- A well-structured implementation based on Weizenbaum's paper and the `implementation_guide.md`
+- A well-structured implementation based on Weizenbaum's paper and the `implementation-guide.md`
 - Deterministic behavior for testing and verification
 
 ---
@@ -891,7 +891,7 @@ cargo doc --open
 
 ### Documentation
 - Weizenbaum's 1966 paper (docs/weizenbaum.eliza.1966.pdf)
-- Implementation guide (docs/handling_problems/wildcard/implementation_guide.md)
+- Implementation guide (docs/handling-problems/wildcard/implementation-guide.md)
 - Original JavaScript implementation (eliza_script/elizabot.js)
 
 ### Rust Resources

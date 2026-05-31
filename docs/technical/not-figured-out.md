@@ -7,7 +7,7 @@ While we have a robust, working model, achieving a truly faithful reconstruction
 ### Specific Historical Ambiguities
 
 1.  **Original Wildcard and Decomposition Logic:**
-    *   The logic described in our `implementation_guide.md` is based on a careful reading of the 1966 paper. However, a code-level comparison with the original Lisp/SLIP source code (if it can be found) is the only way to be 100% certain about the nuances of the backtracking algorithm and componentization.
+    *   The logic described in our `implementation-guide.md` is based on a careful reading of the 1966 paper. However, a code-level comparison with the original Lisp/SLIP source code (if it can be found) is the only way to be 100% certain about the nuances of the backtracking algorithm and componentization.
 
 2.  **Original Response Selection Policy:**
     *   The `elizabot.js` implementation provides both random and cyclic selection. Was the original implementation truly random, or did it use a simpler pseudo-random generator or a purely cyclic method?

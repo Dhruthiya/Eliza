@@ -11,11 +11,11 @@ The JavaScript implementation is split into two main parts:
 
 ## Detailed Execution Semantics (According to `elizabot.js`)
 
-The `elizabot.js` engine and the `implementation_guide.md` provide clear, implementable logic for the following core semantic questions:
+The `elizabot.js` engine and the `implementation-guide.md` provide clear, implementable logic for the following core semantic questions:
 
 ### 1. Capture Indexing and Formal Grammar
 
-A formal grammar for the ELIZA DSL is effectively defined by the combination of the `elizabot.js` parsing logic and the `implementation_guide.md`.
+A formal grammar for the ELIZA DSL is effectively defined by the combination of the `elizabot.js` parsing logic and the `implementation-guide.md`.
 
 *   **DSL Elements:** The grammar consists of:
     *   `*` or `0`: An indefinite wildcard.
@@ -23,7 +23,7 @@ A formal grammar for the ELIZA DSL is effectively defined by the combination of 
     *   `$`: A prefix for a rule that flags its output for memory.
     *   `goto`: A command to redirect to another keyword's rules.
     *   `(n)`: A placeholder for the n-th captured component.
-*   **Capture Indexing Logic:** The `implementation_guide.md` provides a precise algorithm for how capture groups `(n)` are numbered. It uses a recursive, token-based matching system where **every matched part of the rule (wildcards and keywords) becomes a numbered component.** This provides an unambiguous way to handle complex patterns.
+*   **Capture Indexing Logic:** The `implementation-guide.md` provides a precise algorithm for how capture groups `(n)` are numbered. It uses a recursive, token-based matching system where **every matched part of the rule (wildcards and keywords) becomes a numbered component.** This provides an unambiguous way to handle complex patterns.
 
 ### 2. Response Selection Policy
 

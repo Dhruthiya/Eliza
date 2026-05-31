@@ -116,7 +116,7 @@ Go/
   tests/
     golden_transcript_test.go
     decomposer_test.go
-  Go_implementation_plan.md
+  go-plan.md
 ```
 
 ## 5. Data Model In Go
