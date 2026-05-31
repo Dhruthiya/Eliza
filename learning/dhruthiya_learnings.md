@@ -26,7 +26,12 @@
   A key takeaway was the importance of separating the Engine (the logic that processes text) from the Script (the behavioral rules). This modular design allows the system's
   "personality" to be updated or replaced without modifying the core processing code.
 
+  ## Historical Research
+  We informed our project using research by Anthony Hay, who reconstructed ELIZA from its original 1966 source code. This helped us find "hidden" logic that wasn't in the official
+  papers, such as a counter system that keeps the conversation moving and the specific math used to pick responses. 
+
+
   ## Conclusion
   Although the technology is 60 years old, ELIZA provides valuable insights into modern AI. The project serves as a reminder that conversational systems are built on a foundation of
-  pattern recognition and human psychology—it is as much about how we perceive the machine as it is about the code itself.
+  pattern recognition and human psychology.
 
